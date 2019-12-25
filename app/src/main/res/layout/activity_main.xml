@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity" android:orientation="vertical">
+
+    <Button
+            android:text="掃描藍牙"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/start"
+            android:onClick="onclick" android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
+    <Button
+            android:text="停止掃描"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/stop" android:onClick="onclick"/>
+    <Button
+            android:text="連線"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/connect" android:onClick="onclick"/>
+    <Button
+            android:text="停止連線"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/disconnect" android:onClick="onclick"/>
+    <Button
+            android:text="傳送訊息"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/send" android:onClick="onclick"/>
+
+</LinearLayout>
