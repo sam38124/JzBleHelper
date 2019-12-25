@@ -50,14 +50,17 @@ class MainActivity : AppCompatActivity(), Ble_Helper.Ble_CallBack {
         Log.d("JzBleMessage", "藍牙連線")
     }
 
-    override fun RX(a: String) {
-        //當ble收到消息時觸發String為(HexString(16進位字串表示法))
-        Log.d("JzBleMessage", "收到藍牙消息$a")
+    override fun RX(a: BleStream) {
+        //三種Format方式接收藍牙訊息
+        //1.ReadUTF()
+        //2.ReadHEX()
+        //3.ReadBytes()
+        Log.d("JzBleMessage", "收到藍牙消息${a.ReadHEX()}")
     }
 
-    override fun TX(b: String) {
-        //當ble傳送訊息時觸發String為(HexString(16進位字串表示法))
-        Log.d("JzBleMessage", "傳送藍牙消息$b")
+    override fun TX(b: BleStream) {
+        //當ble傳送訊息時觸發
+        Log.d("JzBleMessage", "傳送藍牙消息${b.ReadUTF()}")
     }
 
     override fun ScanBack(device: BluetoothDevice) {
@@ -75,18 +78,18 @@ class MainActivity : AppCompatActivity(), Ble_Helper.Ble_CallBack {
     }
 
     override fun NeedGps() {
-        //6.0以上的手機必須打開手機定位才能取得藍牙權限，監聽到此function即可提醒使用者打開定位
+        //6.0以上的手機必須打開手機定位才能取得藍牙權限，監聽到此function即可提醒使用者打開定位，或者跳轉至設定頁面提醒打開定位
         Log.d("JzBleMessage", "請打開定位系統")
     }
 
-    lateinit var Ble_Helper: Ble_Helper
+lateinit var Ble_Helper: Ble_Helper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Ble_Helper = Ble_Helper(this, this)
     }
-}
+
 ```
 <a name="scan"></a>
 ## 藍牙掃描以及連線
@@ -101,13 +104,10 @@ Ble_Helper.StartScan()
 Ble_Helper.StopScan()
 ```
 #### 藍牙連線
-##### TxChannel以及RxChannel的UUID必需由藍牙的開發者定義<br>
-##### 格式範例:00008D81-0000-1000-8000-00805F9B34FB<br>
+
 ```kotlin
-//Address替換成你掃描到的藍牙地址 格式如:"00:C0:BF:13:05:C7"
-//TxChannel替換為你要發送訊息的藍牙Channel
-//RxChannel替換為你要接收訊息的藍牙Channel
-Ble_Helper.Connect("Address","TxChannel","RxChannel",10)
+//嘗試連線10秒，Address替換為搜尋到的藍牙地址，例如：00:C0:BF:13:05:C7
+Ble_Helper.Connect("Address",10)
 ```
 #### 藍牙斷線
 ```kotlin
@@ -115,23 +115,25 @@ Ble_Helper.Disconnect()
 ```
 <a name="send"></a>
 ## 訊息傳送
-#### 三種方式向藍牙傳送Hello Ble的訊息
-##### UTF-8
-```kotlin
-Ble_Helper.WriteUtf("Hello Ble")
-```
+#### 三種方式向藍牙傳送Hello Ble的訊息，RxChannel為要接收資料的特徵值，TxChannel為要傳送資料的特徵值！
+##### TxChannel以及RxChannel的UUID必需由藍牙的開發者定義<br>
+##### 格式範例:00008D81-0000-1000-8000-00805F9B34FB<br>
 ##### HexString
 ```kotlin
-Ble_Helper.WriteHex("48656C6C6F20426C65")
+ Ble_Helper.WriteHex("48656C6C6F20426C65",RxChannel,TxChannel)
+```
+##### UTF-8
+```kotlin
+Ble_Helper.WriteUtf("Hello Ble",RxChannel,TxChannel)
 ```
 ##### Bytes
 ```kotlin
-Ble_Helper.WriteBytes(byteArrayOf(0x48,0x65,0x6C,0x6C,0x6F,0x20,0x42,0x6C,0x65))
+Ble_Helper.WriteBytes(byteArrayOf(0x48,0x65,0x6C,0x6C,0x6F,0x20,0x42,0x6C,0x65),RxChannel,TxChannel)
 ```
 
 <a name="About"></a>
 ### 關於我
-現任橙的電子全端app開發工程師
+橙的電子Android and Ios Developer
 
 *line:sam38124
 
