@@ -62,7 +62,6 @@ class MainActivity : AppCompatActivity(), Ble_Helper.Ble_CallBack {
         setContentView(R.layout.activity_main)
         Ble_Helper = Ble_Helper(this, this)
         //設定溝通通道
-        Ble_Helper.SetChannel(RxChannel, TxChannel)
 
     }
 
@@ -75,13 +74,16 @@ class MainActivity : AppCompatActivity(), Ble_Helper.Ble_CallBack {
                 Ble_Helper.StopScan()
             }
             R.id.connect -> {
-                Ble_Helper.Connect("00:C0:BF:13:05:C7",10)
+                Ble_Helper.Connect("00:C0:BF:13:05:C7",TxChannel,RxChannel,10)
             }
             R.id.disconnect->{
                 Ble_Helper.Disconnect()
             }
             R.id.send->{
-                Ble_Helper.WriteHex("0AFE03000754504D539CC8F5")
+                //傳送Hello Ble的訊息
+                Ble_Helper.WriteHex("48656C6C6F20426C65")
+                Ble_Helper.WriteUtf("Hello Ble")
+                Ble_Helper.WriteBytes(byteArrayOf(0x48,0x65,0x6C,0x6C,0x6F,0x20,0x42,0x6C,0x65))
             }
         }
     }

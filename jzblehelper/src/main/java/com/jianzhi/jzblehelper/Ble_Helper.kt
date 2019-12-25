@@ -17,11 +17,13 @@ class Ble_Helper(val caller:Ble_CallBack,val context: Context) {
          RXchannel=rx
          TXchannel=tx
      }
-    fun Connect(a: String,time:Int) {
+    fun Connect(address: String,txchannel:String,rxchannel:String,time:Int) {
+        RXchannel=rxchannel
+        TXchannel=txchannel
         scan.scanLeDevice(false)
         caller.Connecting()
         bleServiceControl.bleCallbackC=this
-        bleServiceControl.connect(a)
+        bleServiceControl.connect(address)
         Thread {
             var fal = 0
             while (true) {
