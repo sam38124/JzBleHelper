@@ -23,41 +23,46 @@ import static com.jianzhi.jzblehelper.FormatConvert.StringHexToByte;
 public class BleServiceControl {
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
-//    private final UUID RXUUID=UUID.fromString("00008D81-0000-1000-8000-00805F9B34FB");
-//    private final UUID TXUUID=UUID.fromString("00008D82-0000-1000-8000-00805F9B34FB");
     private BluetoothLeService mBluetoothLeService;
     private ArrayList<BluetoothGattCharacteristic> mGattCharacteristics =
             new ArrayList<>();
-    public boolean isconnect=false;
+    public boolean isconnect = false;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     private String mDeviceAddress;
-    public byte[] getData=new byte[10];
+    public byte[] getData = new byte[10];
     public Ble_Helper bleCallbackC;
-    public  ServiceConnection   mServiceConnection = new ServiceConnection() {
+    public ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
             mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
-            mBluetoothLeService.bleCallbackC=bleCallbackC;
+            mBluetoothLeService.bleCallbackC = bleCallbackC;
             if (!mBluetoothLeService.initialize()) {
                 Log.e(TAG, "Unable to initialize Bluetooth");
             }
             mBluetoothLeService.connect(mDeviceAddress);
         }
+
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             mBluetoothLeService = null;
         }
     };
-   public boolean first =true;
-    public void connect(final String mDeviceAddress){
-        try{
-                this.mDeviceAddress=mDeviceAddress;
-               if(mBluetoothLeService!=null){ mBluetoothLeService.connect(mDeviceAddress);}
-                Intent gattServiceIntent = new Intent(bleCallbackC.getContext(), BluetoothLeService.class);
-                bleCallbackC.getContext().bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-                this.mDeviceAddress=mDeviceAddress;
-        }catch (Exception e){e.printStackTrace();}
+    public boolean first = true;
+
+    public void connect(final String mDeviceAddress) {
+        try {
+            this.mDeviceAddress = mDeviceAddress;
+            if (mBluetoothLeService != null) {
+                mBluetoothLeService.connect(mDeviceAddress);
+            }
+            Intent gattServiceIntent = new Intent(bleCallbackC.getContext(), BluetoothLeService.class);
+            bleCallbackC.getContext().bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+            this.mDeviceAddress = mDeviceAddress;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
     public void displayGattServices(List<BluetoothGattService> gattServices) {
         if (gattServices == null) return;
         String uuid = null;
@@ -70,7 +75,7 @@ public class BleServiceControl {
         for (BluetoothGattService gattService : gattServices) {
             HashMap<String, String> currentServiceData = new HashMap<String, String>();
             uuid = gattService.getUuid().toString();
-            Log.d("uuid",uuid);
+            Log.d("uuid", uuid);
             currentServiceData.put(
                     LIST_NAME, SampleGattAttributes.lookup(uuid, unknownServiceString));
             currentServiceData.put(LIST_UUID, uuid);
@@ -84,7 +89,7 @@ public class BleServiceControl {
             // Loops through available Characteristics.
             for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
                 mGattCharacteristics.add(gattCharacteristic);
-                if(UUID.fromString(bleCallbackC.getRXchannel()).equals(gattCharacteristic.getUuid())){
+                if (UUID.fromString(bleCallbackC.getRXchannel()).equals(gattCharacteristic.getUuid())) {
                     mBluetoothLeService.setCharacteristicNotification(gattCharacteristic, true);
                 }
                 HashMap<String, String> currentCharaData = new HashMap<String, String>();
@@ -97,22 +102,32 @@ public class BleServiceControl {
             gattCharacteristicData.add(gattCharacteristicGroupData);
         }
     }
-    public void ReadCmd(String uuid){
-        for(BluetoothGattCharacteristic a:mGattCharacteristics){
-            Log.w("char",""+a.getUuid());
-            if(UUID.fromString(uuid).equals(a.getUuid())){
+
+    public void ReadCmd(String uuid) {
+        for (BluetoothGattCharacteristic a : mGattCharacteristics) {
+            Log.w("char", "" + a.getUuid());
+            if (UUID.fromString(uuid).equals(a.getUuid())) {
                 mBluetoothLeService.readCharacteristic(a);
                 break;
             }
         }
     }
 
-    public boolean WriteCmd(byte[] write,int check){
-        for(BluetoothGattCharacteristic a:mGattCharacteristics){
-            if(UUID.fromString(bleCallbackC.getTXchannel()).equals(a.getUuid())){
-                mBluetoothLeService.check=check;
-                mBluetoothLeService.tmp="";
-                mNotifyCharacteristic=a;
+    public void SubscribeRxChannel() {
+        for (BluetoothGattCharacteristic a : mGattCharacteristics) {
+            if (UUID.fromString(bleCallbackC.getRXchannel()).equals(a.getUuid())) {
+                mBluetoothLeService.setCharacteristicNotification(a, true);
+            }
+        }
+    }
+
+    public boolean WriteCmd(byte[] write, int check) {
+        SubscribeRxChannel();
+        for (BluetoothGattCharacteristic a : mGattCharacteristics) {
+            if (UUID.fromString(bleCallbackC.getTXchannel()).equals(a.getUuid())) {
+                mBluetoothLeService.check = check;
+                mBluetoothLeService.tmp = "";
+                mNotifyCharacteristic = a;
                 mNotifyCharacteristic.setValue(write);
                 mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic);
                 return true;
@@ -120,22 +135,28 @@ public class BleServiceControl {
         }
         return false;
     }
-    public boolean WriteCmd(String write,int check){
-for(BluetoothGattCharacteristic a:mGattCharacteristics){
-    if(UUID.fromString(bleCallbackC.getTXchannel()).equals(a.getUuid())){
-        mBluetoothLeService.check=check;
-        mBluetoothLeService.tmp="";
-        mNotifyCharacteristic=a;
-        mNotifyCharacteristic.setValue(StringHexToByte(write));
-        mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic);
-        return true;
-    }
-}
-return false;
-    }
-    public void disconnect(){
-        if(mBluetoothLeService!=null){mBluetoothLeService.disconnect();}
+
+    public boolean WriteCmd(String write, int check) {
+        SubscribeRxChannel();
+        for (BluetoothGattCharacteristic a : mGattCharacteristics) {
+            if (UUID.fromString(bleCallbackC.getTXchannel()).equals(a.getUuid())) {
+                mBluetoothLeService.check = check;
+                mBluetoothLeService.tmp = "";
+                mNotifyCharacteristic = a;
+                mNotifyCharacteristic.setValue(StringHexToByte(write));
+                mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic);
+                return true;
+            }
         }
+        return false;
+    }
+
+    public void disconnect() {
+        if (mBluetoothLeService != null) {
+            mBluetoothLeService.disconnect();
+        }
+    }
+
     public static boolean isServiceRunning(Context context, String ServiceName) {
         if (("").equals(ServiceName) || ServiceName == null)
             return false;

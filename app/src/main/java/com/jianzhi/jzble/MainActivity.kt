@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
+import com.jianzhi.jzblehelper.Beans.BleStream
 import com.jianzhi.jzblehelper.Ble_Helper
 
 class MainActivity : AppCompatActivity(), Ble_Helper.Ble_CallBack {
@@ -26,14 +27,17 @@ class MainActivity : AppCompatActivity(), Ble_Helper.Ble_CallBack {
         Log.d("JzBleMessage", "藍牙連線")
     }
 
-    override fun RX(a: String) {
-        //當ble收到消息時觸發String為(HexString(16進位字串表示法))
-        Log.d("JzBleMessage", "收到藍牙消息$a")
+    override fun RX(a: BleStream) {
+        //三種Format方式接收藍牙訊息
+        //1.ReadUTF()
+        //2.ReadHEX()
+        //3.ReadBytes()
+        Log.d("JzBleMessage", "收到藍牙消息${a.ReadHEX()}")
     }
 
-    override fun TX(b: String) {
+    override fun TX(b: BleStream) {
         //當ble傳送訊息時觸發String為(HexString(16進位字串表示法))
-        Log.d("JzBleMessage", "傳送藍牙消息$b")
+        Log.d("JzBleMessage", "傳送藍牙消息${b.ReadUTF()}")
     }
 
     override fun ScanBack(device: BluetoothDevice) {
@@ -51,7 +55,7 @@ class MainActivity : AppCompatActivity(), Ble_Helper.Ble_CallBack {
     }
 
     override fun NeedGps() {
-        //6.0以上的手機必須打開手機定位才能取得藍牙權限，監聽到此function即可提醒使用者打開定位
+        //6.0以上的手機必須打開手機定位才能取得藍牙權限，監聽到此function即可提醒使用者打開定位，或者跳轉至設定頁面提醒打開定位
         Log.d("JzBleMessage", "請打開定位系統")
     }
 
@@ -61,8 +65,6 @@ class MainActivity : AppCompatActivity(), Ble_Helper.Ble_CallBack {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Ble_Helper = Ble_Helper(this, this)
-        //設定溝通通道
-
     }
 
     fun onclick(view: View) {
@@ -74,16 +76,17 @@ class MainActivity : AppCompatActivity(), Ble_Helper.Ble_CallBack {
                 Ble_Helper.StopScan()
             }
             R.id.connect -> {
-                Ble_Helper.Connect("00:C0:BF:13:05:C7",TxChannel,RxChannel,10)
+                Ble_Helper.Connect("00:C0:BF:13:05:C7",10)
             }
             R.id.disconnect->{
                 Ble_Helper.Disconnect()
             }
             R.id.send->{
                 //傳送Hello Ble的訊息
-                Ble_Helper.WriteHex("48656C6C6F20426C65")
-                Ble_Helper.WriteUtf("Hello Ble")
-                Ble_Helper.WriteBytes(byteArrayOf(0x48,0x65,0x6C,0x6C,0x6F,0x20,0x42,0x6C,0x65))
+                //RxChannel為接收資料的特徵值，TxChannel為傳送資料的特徵值
+                Ble_Helper.WriteHex("48656C6C6F20426C65",RxChannel,TxChannel)
+                Ble_Helper.WriteUtf("Hello Ble",RxChannel,TxChannel)
+                Ble_Helper.WriteBytes(byteArrayOf(0x48,0x65,0x6C,0x6C,0x6F,0x20,0x42,0x6C,0x65),RxChannel,TxChannel)
             }
         }
     }
