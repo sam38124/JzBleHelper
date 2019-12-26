@@ -89,9 +89,6 @@ public class BleServiceControl {
             // Loops through available Characteristics.
             for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
                 mGattCharacteristics.add(gattCharacteristic);
-                if (UUID.fromString(bleCallbackC.getRXchannel()).equals(gattCharacteristic.getUuid())) {
-                    mBluetoothLeService.setCharacteristicNotification(gattCharacteristic, true);
-                }
                 HashMap<String, String> currentCharaData = new HashMap<String, String>();
                 uuid = gattCharacteristic.getUuid().toString();
                 currentCharaData.put(

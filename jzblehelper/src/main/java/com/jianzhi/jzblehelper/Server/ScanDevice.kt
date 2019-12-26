@@ -79,15 +79,15 @@ class ScanDevice(var scanBle: Ble_Helper, var context: Context) {
 
     //----------method2開始掃描
     fun scanLeDevice(enable: Boolean) {
-        if (enable) {
-            mLeDevices.clear()
-            if (mBluetoothAdapter == null) {
-                Log.w("ss", "是null")
+        try{
+            if (enable) {
+                mLeDevices.clear()
+                mBluetoothAdapter!!.startLeScan(mLeScanCallback)
+            } else {
+                mBluetoothAdapter!!.stopLeScan(mLeScanCallback)
             }
-            mBluetoothAdapter!!.startLeScan(mLeScanCallback)
-        } else {
-            mBluetoothAdapter!!.stopLeScan(mLeScanCallback)
-        }
+        }catch (e:Exception){}
+
     }
 
     companion object {

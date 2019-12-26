@@ -87,6 +87,7 @@ class MainActivity : AppCompatActivity(), Ble_Helper.Ble_CallBack {
                 Ble_Helper.WriteHex("48656C6C6F20426C65",RxChannel,TxChannel)
                 Ble_Helper.WriteUtf("Hello Ble",RxChannel,TxChannel)
                 Ble_Helper.WriteBytes(byteArrayOf(0x48,0x65,0x6C,0x6C,0x6F,0x20,0x42,0x6C,0x65),RxChannel,TxChannel)
+//                Ble_Helper.WriteHex("0AFE03000754504D539CC8F5",RxChannel,TxChannel)
             }
         }
     }

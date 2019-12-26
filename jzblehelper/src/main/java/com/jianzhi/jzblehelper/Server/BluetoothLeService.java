@@ -286,8 +286,9 @@ public class BluetoothLeService extends Service {
             return;
         }
         mBluetoothGatt.setCharacteristicNotification(characteristic, true);
-        Log.w("設定descripe", "" + characteristic.getUuid());
         BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"));
+        if(descriptor.getValue()==BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE){return;}
+        Log.w("設定descripe", "" + characteristic.getUuid());
         if (descriptor != null) {
             byte[] val = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
             ;
@@ -297,7 +298,11 @@ public class BluetoothLeService extends Service {
             descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
             mBluetoothGatt.writeDescriptor(descriptor);
         }
-
+        try {
+            Thread.currentThread().sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
