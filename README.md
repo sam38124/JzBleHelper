@@ -1,3 +1,6 @@
+[![](https://jitpack.io/v/sam38124/JzBleHelper.svg)](https://jitpack.io/#sam38124/JzBleHelper)
+[![Platform](https://img.shields.io/badge/平台-%20Android%20-brightgreen.svg)](https://github.com/sam38124)
+[![characteristic](https://img.shields.io/badge/特點-%20輕量級%20%7C%20簡單易用%20%20%7C%20穩定%20-brightgreen.svg)](https://github.com/sam38124)
 # JzBleHelper
 一套高效且敏捷的Ble溝通框架，幫助開發者快速部署你的藍牙應用．
 ## 目錄
