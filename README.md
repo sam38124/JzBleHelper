@@ -136,7 +136,7 @@ Ble_Helper.writeBytes(byteArrayOf(0x48,0x65,0x6C,0x6C,0x6F,0x20,0x42,0x6C,0x65),
 
 <a name="About"></a>
 ### 關於我
-橙的電子Android and Ios Developer
+橙的電子android and ios developer
 
 *line:sam38124
 
