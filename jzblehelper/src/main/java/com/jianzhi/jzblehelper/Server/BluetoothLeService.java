@@ -62,7 +62,7 @@ public class BluetoothLeService extends Service {
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             String intentAction;
             if (newState == BluetoothProfile.STATE_CONNECTED) {
-                bleCallbackC.getCaller().ConnectSuccess();
+                bleCallbackC.getCaller().connectSuccess();
                 bleCallbackC.getBleServiceControl().isconnect = true;
                 Log.w("s", "連線");
                 ;
@@ -73,7 +73,7 @@ public class BluetoothLeService extends Service {
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 mConnectionState = STATE_DISCONNECTED;
                 Log.i(TAG, "Disconnected from GATT server.");
-                bleCallbackC.getCaller().ConnectFalse();
+                bleCallbackC.getCaller().connectFalse();
                 bleCallbackC.getBleServiceControl().isconnect = false;
                 Log.w("s", "斷線");
                 ;
@@ -95,13 +95,13 @@ public class BluetoothLeService extends Service {
                                          int status) {
             tmp = tmp + bytesToHex(characteristic.getValue());
             if (tmp.length() == check || check == 0) {
-                bleCallbackC.getCaller().RX(new BleStream(characteristic.getValue()));
+                bleCallbackC.getCaller().rx(new BleStream(characteristic.getValue()));
             }
         }
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            bleCallbackC.getCaller().TX(new BleStream(characteristic.getValue()));
+            bleCallbackC.getCaller().tx(new BleStream(characteristic.getValue()));
         }
 
         @Override
@@ -109,7 +109,7 @@ public class BluetoothLeService extends Service {
                                             BluetoothGattCharacteristic characteristic) {
             tmp = tmp + bytesToHex(characteristic.getValue());
             if (tmp.length() == check || check == 0) {
-                bleCallbackC.getCaller().RX(new BleStream(characteristic.getValue()));
+                bleCallbackC.getCaller().rx(new BleStream(characteristic.getValue()));
             }
 
         }
