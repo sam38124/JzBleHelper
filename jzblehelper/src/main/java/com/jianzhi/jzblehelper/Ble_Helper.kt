@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.os.Handler
 import com.jianzhi.jzblehelper.Beans.BleStream
+import com.jianzhi.jzblehelper.Callback.Ble_CallBack
 import com.jianzhi.jzblehelper.Server.BleServiceControl
 import com.jianzhi.jzblehelper.Server.ScanDevice
 import java.nio.charset.Charset
@@ -14,14 +15,14 @@ class Ble_Helper(val caller: Ble_CallBack, val context: Context) {
     var handler = Handler()
     var bleServiceControl = BleServiceControl()
     var scan = ScanDevice(this, context)
-    fun SetChannel(rx: String, tx: String) {
+    fun setChannel(rx: String, tx: String) {
         RXchannel = rx
         TXchannel = tx
     }
 
-    fun Connect(address: String,time: Int) {
+    fun connect(address: String,time: Int) {
         scan.scanLeDevice(false)
-        caller.Connecting()
+        caller.connecting()
         bleServiceControl.bleCallbackC = this
         bleServiceControl.connect(address)
         Thread {
@@ -35,54 +36,45 @@ class Ble_Helper(val caller: Ble_CallBack, val context: Context) {
             }
             handler.post {
                 if (!bleServiceControl.isconnect) {
-                    caller.ConnectFalse()
+                    caller.connectFalse()
                 }
             }
-            StopScan()
+            stopScan()
         }.start()
     }
 
-    fun ReadCharacteristics(uuid: String) {
+    fun readCharacteristics(uuid: String) {
         bleServiceControl.ReadCmd(uuid)
     }
 
-    fun WriteHex(a: String,rx: String, tx: String) {
-        SetChannel(rx,tx)
+    fun writeHex(a: String,rx: String, tx: String) {
+        setChannel(rx,tx)
         bleServiceControl.WriteCmd(a, 0)
     }
 
-    fun WriteUtf(a: String,rx: String, tx: String) {
-        SetChannel(rx,tx)
+    fun writeUtf(a: String,rx: String, tx: String) {
+        setChannel(rx,tx)
         bleServiceControl.WriteCmd(a.toByteArray(Charset.defaultCharset()), 0)
     }
 
-    fun WriteBytes(a: ByteArray,rx: String, tx: String) {
-        SetChannel(rx,tx)
+    fun writeBytes(a: ByteArray,rx: String, tx: String) {
+        setChannel(rx,tx)
         bleServiceControl.WriteCmd(a, 0)
     }
 
-    fun StartScan() {
+    fun startScan() {
         scan.setmBluetoothAdapter()
     }
 
-    fun StopScan() {
+    fun stopScan() {
         scan.scanLeDevice(false)
     }
 
-    fun Disconnect() {
+    fun disconnect() {
         bleServiceControl.disconnect()
     }
 
-    interface Ble_CallBack {
-        fun Connecting()
-        fun ConnectFalse()
-        fun ConnectSuccess()
-        fun RX(a: BleStream)
-        fun TX(b: BleStream)
-        fun ScanBack(device: BluetoothDevice)
-        fun RequestPermission(permission: ArrayList<String>)
-        fun NeedGps()
-    }
+
 }
 
 

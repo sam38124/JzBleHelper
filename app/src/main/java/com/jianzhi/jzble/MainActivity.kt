@@ -8,45 +8,46 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import com.jianzhi.jzblehelper.Beans.BleStream
 import com.jianzhi.jzblehelper.Ble_Helper
+import com.jianzhi.jzblehelper.Callback.Ble_CallBack
 
-class MainActivity : AppCompatActivity(), Ble_Helper.Ble_CallBack {
+class MainActivity : AppCompatActivity(), Ble_CallBack {
     var RxChannel = "00008D81-0000-1000-8000-00805F9B34FB"
     var TxChannel = "00008D82-0000-1000-8000-00805F9B34FB"
-    override fun Connecting() {
+    override fun connecting() {
         //當ble開始連線時觸發
         Log.d("JzBleMessage", "藍牙正在連線中")
     }
 
-    override fun ConnectFalse() {
+    override fun connectFalse() {
         //當ble連線失敗時觸發
         Log.d("JzBleMessage", "藍牙斷線")
     }
 
-    override fun ConnectSuccess() {
+    override fun connectSuccess() {
         //當ble連線成功時觸發
         Log.d("JzBleMessage", "藍牙連線")
     }
 
-    override fun RX(a: BleStream) {
+    override fun rx(a: BleStream) {
         //三種Format方式接收藍牙訊息
-        //1.ReadUTF()
-        //2.ReadHEX()
-        //3.ReadBytes()
-        Log.d("JzBleMessage", "收到藍牙消息${a.ReadHEX()}")
+        //1.readUTF()
+        //2.readHEX()
+        //3.readBytes()
+        Log.d("JzBleMessage", "收到藍牙消息${a.readHEX()}")
     }
 
-    override fun TX(b: BleStream) {
+    override fun tx(b: BleStream) {
         //當ble傳送訊息時觸發String為(HexString(16進位字串表示法))
-        Log.d("JzBleMessage", "傳送藍牙消息${b.ReadUTF()}")
+        Log.d("JzBleMessage", "傳送藍牙消息${b.readUTF()}")
     }
 
-    override fun ScanBack(device: BluetoothDevice) {
+    override fun scanBack(device: BluetoothDevice) {
         //當掃描到新裝置時觸發
         Log.d("JzBleMessage", "掃描到裝置:名稱${device.name}/地址:${device.address}")
         //當獲取到device.address即可儲存下來，藍牙連線時會使用到
     }
 
-    override fun RequestPermission(permission: ArrayList<String>) {
+    override fun requestPermission(permission: ArrayList<String>) {
         //當藍牙權限不足時觸發
         for (i in permission) {
             Log.e("JzBleMessage", "權限不足請先請求權限${i}")
@@ -54,7 +55,7 @@ class MainActivity : AppCompatActivity(), Ble_Helper.Ble_CallBack {
         ActivityCompat.requestPermissions(this, permission.toTypedArray(), 10)
     }
 
-    override fun NeedGps() {
+    override fun needGps() {
         //6.0以上的手機必須打開手機定位才能取得藍牙權限，監聽到此function即可提醒使用者打開定位，或者跳轉至設定頁面提醒打開定位
         Log.d("JzBleMessage", "請打開定位系統")
     }
@@ -70,24 +71,24 @@ class MainActivity : AppCompatActivity(), Ble_Helper.Ble_CallBack {
     fun onclick(view: View) {
         when (view.id) {
             R.id.start -> {
-                Ble_Helper.StartScan()
+                Ble_Helper.startScan()
             }
             R.id.stop -> {
-                Ble_Helper.StopScan()
+                Ble_Helper.stopScan()
             }
             R.id.connect -> {
-                Ble_Helper.Connect("00:C0:BF:13:05:C7",10)
+                Ble_Helper.connect("00:C0:BF:13:05:C7",10)
             }
             R.id.disconnect->{
-                Ble_Helper.Disconnect()
+                Ble_Helper.disconnect()
             }
             R.id.send->{
                 //傳送Hello Ble的訊息
                 //RxChannel為接收資料的特徵值，TxChannel為傳送資料的特徵值
-                Ble_Helper.WriteHex("48656C6C6F20426C65",RxChannel,TxChannel)
-                Ble_Helper.WriteUtf("Hello Ble",RxChannel,TxChannel)
-                Ble_Helper.WriteBytes(byteArrayOf(0x48,0x65,0x6C,0x6C,0x6F,0x20,0x42,0x6C,0x65),RxChannel,TxChannel)
-//                Ble_Helper.WriteHex("0AFE03000754504D539CC8F5",RxChannel,TxChannel)
+//                Ble_Helper.WriteHex("48656C6C6F20426C65",RxChannel,TxChannel)
+//                Ble_Helper.WriteUtf("Hello Ble",RxChannel,TxChannel)
+//                Ble_Helper.WriteBytes(byteArrayOf(0x48,0x65,0x6C,0x6C,0x6F,0x20,0x42,0x6C,0x65),RxChannel,TxChannel)
+                Ble_Helper.writeHex("0AFE03000754504D539CC8F5",RxChannel,TxChannel)
             }
         }
     }

@@ -5,13 +5,13 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 
 class BleStream (private var data:ByteArray){
-    fun ReadUTF():String{
+    fun readUTF():String{
         return String(data, StandardCharsets.UTF_8);
     }
-    fun ReadBytes():ByteArray{
+    fun readBytes():ByteArray{
         return data
     }
-    fun ReadHEX():String{
+    fun readHEX():String{
         return bytesToHex(data)
     }
 }

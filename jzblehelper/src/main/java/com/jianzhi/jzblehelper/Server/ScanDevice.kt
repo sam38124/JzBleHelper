@@ -18,7 +18,7 @@ class ScanDevice(var scanBle: Ble_Helper, var context: Context) {
     private var mBluetoothAdapter: BluetoothAdapter? = null
     private val mLeDevices = ArrayList<BluetoothDevice>()
     private val mLeScanCallback = BluetoothAdapter.LeScanCallback { device, rssi, scanRecord ->
-            scanBle.caller.ScanBack(device)
+            scanBle.caller.scanBack(device)
         val stringBuilder = StringBuilder()
         for (a in scanRecord) {
             stringBuilder.append(String.format("%02X", a))
@@ -52,10 +52,10 @@ class ScanDevice(var scanBle: Ble_Helper, var context: Context) {
                 a.add(Manifest.permission.ACCESS_FINE_LOCATION)
             }
             if (a.size > 0) {
-                scanBle.caller.RequestPermission(a)
+                scanBle.caller.requestPermission(a)
             } else {
                 if (!isLocServiceEnable(context)) {
-                    scanBle.caller.NeedGps()
+                    scanBle.caller.needGps()
                 }else{
                     RequestPermission()
                 }
