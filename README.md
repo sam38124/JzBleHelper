@@ -34,7 +34,7 @@ implementation 'com.github.sam38124:JzBleHelper:3.1'
 <a name="Use"></a>
 ## 如何使用
 
-### 在要監聽藍牙的地方繼承Ble_Helper.Ble_CallBack
+### 在要監聽藍牙的地方繼承Ble_CallBack
 #### 1.Activity範例
 ```kotlin
 class MainActivity : AppCompatActivity(), Ble_CallBack {
