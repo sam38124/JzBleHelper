@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity(), Ble_CallBack {
     }
 
     override fun needGps() {
-        //6.0以上的手機必須打開手機定位才能取得藍牙權限，監聽到此function即可提醒使用者打開定位，或者跳轉至設定頁面提醒打開定位
+        //6.0以上的手機必須打開手機定位才能掃描藍牙，監聽到此function即可提醒使用者打開定位，或者跳轉至設定頁面提醒打開定位
         Log.d("JzBleMessage", "請打開定位系統")
     }
 
