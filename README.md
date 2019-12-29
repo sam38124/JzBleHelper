@@ -28,7 +28,7 @@ allprojects {
 在需要用到這個庫的module中的build.gradle中的dependencies中加入
 ```kotlin
 dependencies {
-implementation 'com.github.sam38124:JzBleHelper:3.2'
+implementation 'com.github.sam38124:JzBleHelper:3.3'
 }
 ```
 <a name="Use"></a>
@@ -37,37 +37,37 @@ implementation 'com.github.sam38124:JzBleHelper:3.2'
 ### 在要監聽藍牙的地方繼承Ble_CallBack
 #### 1.Activity範例
 ```kotlin
-class MainActivity : AppCompatActivity(), Ble_CallBack {
-    override fun connecting() {
+class MainActivity : AppCompatActivity(), BleCallBack {
+    override fun onConnecting() {
         //當ble開始連線時觸發
         Log.d("JzBleMessage", "藍牙正在連線中")
     }
 
-    override fun connectFalse() {
+    override fun onConnectFalse() {
         //當ble連線失敗時觸發
         Log.d("JzBleMessage", "藍牙斷線")
     }
 
-    override fun connectSuccess() {
+    override fun onConnectSuccess() {
         //當ble連線成功時觸發
         Log.d("JzBleMessage", "藍牙連線")
     }
 
-    override fun rx(a: BleStream) {
+    override fun rx(a: BleBinary) {
         //三種Format方式接收藍牙訊息
-        //1.ReadUTF()
-        //2.ReadHEX()
-        //3.ReadBytes()
+        //1.readUTF()
+        //2.readHEX()
+        //3.readBytes()
         Log.d("JzBleMessage", "收到藍牙消息${a.readHEX()}")
     }
 
-    override fun tx(b: BleStream) {
-        //當ble傳送訊息時觸發
+    override fun tx(b: BleBinary) {
+        //當ble傳送訊息時觸發String為(HexString(16進位字串表示法))
         Log.d("JzBleMessage", "傳送藍牙消息${b.readUTF()}")
     }
 
     override fun scanBack(device: BluetoothDevice) {
-        //當掃描到新裝置時觸發，裝置名稱可能為空，在取得裝置名稱時要注意邏輯代碼！！
+        //當掃描到新裝置時觸發
         Log.d("JzBleMessage", "掃描到裝置:名稱${device.name}/地址:${device.address}")
         //當獲取到device.address即可儲存下來，藍牙連線時會使用到
     }
@@ -80,19 +80,19 @@ class MainActivity : AppCompatActivity(), Ble_CallBack {
         ActivityCompat.requestPermissions(this, permission.toTypedArray(), 10)
     }
 
-    override fun needGps() {
-        //6.0以上的手機必須打開手機定位才能掃描藍牙，監聽到此function即可提醒使用者打開定位，或者跳轉至設定頁面提醒打開定位
+    override fun needGPS() {
+        //6.0以上的手機必須打開手機定位才能取得藍牙權限，監聽到此function即可提醒使用者打開定位，或者跳轉至設定頁面提醒打開定位
         Log.d("JzBleMessage", "請打開定位系統")
     }
 
-lateinit var Ble_Helper: Ble_Helper
+    lateinit var BleHelper: BleHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Ble_Helper = Ble_Helper(this, this)
+        BleHelper = BleHelper(this, this)
     }
-
+    }
 ```
 <a name="scan"></a>
 ## 藍牙掃描以及連線
