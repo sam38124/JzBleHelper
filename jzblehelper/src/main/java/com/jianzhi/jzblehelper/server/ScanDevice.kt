@@ -1,4 +1,4 @@
-package com.jianzhi.jzblehelper.Server
+package com.jianzhi.jzblehelper.server
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
@@ -10,15 +10,15 @@ import android.location.LocationManager
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
-import com.jianzhi.jzblehelper.Ble_Helper
+import com.jianzhi.jzblehelper.BleHelper
 
 import java.util.ArrayList
 
-class ScanDevice(var scanBle: Ble_Helper, var context: Context) {
+class ScanDevice( var context: Context,var blehelper: BleHelper) {
     private var mBluetoothAdapter: BluetoothAdapter? = null
     private val mLeDevices = ArrayList<BluetoothDevice>()
     private val mLeScanCallback = BluetoothAdapter.LeScanCallback { device, rssi, scanRecord ->
-            scanBle.caller.scanBack(device)
+            blehelper.callback.scanBack(device)
         val stringBuilder = StringBuilder()
         for (a in scanRecord) {
             stringBuilder.append(String.format("%02X", a))
@@ -52,10 +52,10 @@ class ScanDevice(var scanBle: Ble_Helper, var context: Context) {
                 a.add(Manifest.permission.ACCESS_FINE_LOCATION)
             }
             if (a.size > 0) {
-                scanBle.caller.requestPermission(a)
+                blehelper.callback.requestPermission(a)
             } else {
                 if (!isLocServiceEnable(context)) {
-                    scanBle.caller.needGps()
+                    blehelper.callback.needGPS()
                 }else{
                     RequestPermission()
                 }

@@ -6,29 +6,29 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
-import com.jianzhi.jzblehelper.Beans.BleStream
-import com.jianzhi.jzblehelper.Ble_Helper
-import com.jianzhi.jzblehelper.Callback.Ble_CallBack
+import com.jianzhi.jzblehelper.models.BleBinary
+import com.jianzhi.jzblehelper.BleHelper
+import com.jianzhi.jzblehelper.callback.BleCallBack
 
-class MainActivity : AppCompatActivity(), Ble_CallBack {
+class MainActivity : AppCompatActivity(), BleCallBack {
     var RxChannel = "00008D81-0000-1000-8000-00805F9B34FB"
     var TxChannel = "00008D82-0000-1000-8000-00805F9B34FB"
-    override fun connecting() {
+    override fun onConnecting() {
         //當ble開始連線時觸發
         Log.d("JzBleMessage", "藍牙正在連線中")
     }
 
-    override fun connectFalse() {
+    override fun onConnectFalse() {
         //當ble連線失敗時觸發
         Log.d("JzBleMessage", "藍牙斷線")
     }
 
-    override fun connectSuccess() {
+    override fun onConnectSuccess() {
         //當ble連線成功時觸發
         Log.d("JzBleMessage", "藍牙連線")
     }
 
-    override fun rx(a: BleStream) {
+    override fun rx(a: BleBinary) {
         //三種Format方式接收藍牙訊息
         //1.readUTF()
         //2.readHEX()
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), Ble_CallBack {
         Log.d("JzBleMessage", "收到藍牙消息${a.readHEX()}")
     }
 
-    override fun tx(b: BleStream) {
+    override fun tx(b: BleBinary) {
         //當ble傳送訊息時觸發String為(HexString(16進位字串表示法))
         Log.d("JzBleMessage", "傳送藍牙消息${b.readUTF()}")
     }
@@ -55,40 +55,40 @@ class MainActivity : AppCompatActivity(), Ble_CallBack {
         ActivityCompat.requestPermissions(this, permission.toTypedArray(), 10)
     }
 
-    override fun needGps() {
+    override fun needGPS() {
         //6.0以上的手機必須打開手機定位才能取得藍牙權限，監聽到此function即可提醒使用者打開定位，或者跳轉至設定頁面提醒打開定位
         Log.d("JzBleMessage", "請打開定位系統")
     }
 
-    lateinit var Ble_Helper: Ble_Helper
+    lateinit var BleHelper: BleHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Ble_Helper = Ble_Helper(this, this)
+        BleHelper = BleHelper(this, this)
     }
 
     fun onclick(view: View) {
         when (view.id) {
             R.id.start -> {
-                Ble_Helper.startScan()
+                BleHelper.startScan()
             }
             R.id.stop -> {
-                Ble_Helper.stopScan()
+                BleHelper.stopScan()
             }
             R.id.connect -> {
-                Ble_Helper.connect("00:C0:BF:13:05:C7",10)
+                BleHelper.connect("00:C0:BF:13:05:C7",10)
             }
             R.id.disconnect->{
-                Ble_Helper.disconnect()
+                BleHelper.disconnect()
             }
             R.id.send->{
                 //傳送Hello Ble的訊息
                 //RxChannel為接收資料的特徵值，TxChannel為傳送資料的特徵值
-//                Ble_Helper.WriteHex("48656C6C6F20426C65",RxChannel,TxChannel)
-//                Ble_Helper.WriteUtf("Hello Ble",RxChannel,TxChannel)
-//                Ble_Helper.WriteBytes(byteArrayOf(0x48,0x65,0x6C,0x6C,0x6F,0x20,0x42,0x6C,0x65),RxChannel,TxChannel)
-                Ble_Helper.writeHex("0AFE03000754504D539CC8F5",RxChannel,TxChannel)
+//                BleHelper.WriteHex("48656C6C6F20426C65",RxChannel,TxChannel)
+//                BleHelper.WriteUtf("Hello Ble",RxChannel,TxChannel)
+//                BleHelper.WriteBytes(byteArrayOf(0x48,0x65,0x6C,0x6C,0x6F,0x20,0x42,0x6C,0x65),RxChannel,TxChannel)
+                BleHelper.writeHex("0AFE03000754504D539CC8F5",RxChannel,TxChannel)
             }
         }
     }

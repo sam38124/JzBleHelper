@@ -1,10 +1,9 @@
-package com.jianzhi.jzblehelper.Beans
+package com.jianzhi.jzblehelper.models
 
 import com.jianzhi.jzblehelper.FormatConvert.bytesToHex
-import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 
-class BleStream (private var data:ByteArray){
+class BleBinary (private var data:ByteArray){
     fun readUTF():String{
         return String(data, StandardCharsets.UTF_8);
     }

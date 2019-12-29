@@ -1,42 +1,40 @@
 package com.jianzhi.jzblehelper
 
-import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.os.Handler
-import com.jianzhi.jzblehelper.Beans.BleStream
-import com.jianzhi.jzblehelper.Callback.Ble_CallBack
-import com.jianzhi.jzblehelper.Server.BleServiceControl
-import com.jianzhi.jzblehelper.Server.ScanDevice
+import com.jianzhi.jzblehelper.callback.BleCallBack
+import com.jianzhi.jzblehelper.server.BleServiceControl
+import com.jianzhi.jzblehelper.server.ScanDevice
 import java.nio.charset.Charset
 
-class Ble_Helper(val caller: Ble_CallBack, val context: Context) {
+class BleHelper(val context: Context,val callback: BleCallBack) {
     var RXchannel = ""
     var TXchannel = ""
     var handler = Handler()
-    var bleServiceControl = BleServiceControl()
-    var scan = ScanDevice(this, context)
+    internal var bleServiceControl = BleServiceControl()
+    var scan = ScanDevice( context,this)
     fun setChannel(rx: String, tx: String) {
         RXchannel = rx
         TXchannel = tx
     }
 
-    fun connect(address: String,time: Int) {
+    fun connect(address: String,seconds: Int) {
         scan.scanLeDevice(false)
-        caller.connecting()
+        callback.onConnecting()
         bleServiceControl.bleCallbackC = this
         bleServiceControl.connect(address)
         Thread {
-            var fal = 0
+            var nowtime = 0
             while (true) {
-                if (bleServiceControl.isconnect || fal == time) {
+                if (bleServiceControl.isconnect || nowtime == seconds) {
                     break
                 }
                 Thread.sleep(1000)
-                fal++
+                nowtime++
             }
             handler.post {
                 if (!bleServiceControl.isconnect) {
-                    caller.connectFalse()
+                    callback.onConnectFalse()
                 }
             }
             stopScan()
@@ -54,7 +52,7 @@ class Ble_Helper(val caller: Ble_CallBack, val context: Context) {
 
     fun writeUtf(a: String,rx: String, tx: String) {
         setChannel(rx,tx)
-        bleServiceControl.WriteCmd(a.toByteArray(Charset.defaultCharset()), 0)
+        bleServiceControl.WriteCmd(a.toByteArray(Charset.forName("UTF-8")), 0)
     }
 
     fun writeBytes(a: ByteArray,rx: String, tx: String) {
