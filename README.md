@@ -62,7 +62,10 @@ class MainActivity : AppCompatActivity(), BleCallBack {
     }
 
     override fun tx(b: BleBinary) {
-        //當ble傳送訊息時觸發String為(HexString(16進位字串表示法))
+        //當ble傳送訊息時觸發
+	//1.readUTF()
+        //2.readHEX()
+        //3.readBytes()
         Log.d("JzBleMessage", "傳送藍牙消息${b.readUTF()}")
     }
 
