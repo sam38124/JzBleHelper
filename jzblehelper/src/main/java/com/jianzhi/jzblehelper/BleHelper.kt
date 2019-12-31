@@ -10,6 +10,7 @@ import java.nio.charset.Charset
 class BleHelper(val context: Context,val callback: BleCallBack) {
     var RXchannel = ""
     var TXchannel = ""
+    var RxData=""
     var handler = Handler()
     internal var bleServiceControl = BleServiceControl()
     var scan = ScanDevice( context,this)
@@ -46,16 +47,19 @@ class BleHelper(val context: Context,val callback: BleCallBack) {
     }
 
     fun writeHex(a: String,rx: String, tx: String) {
+        RxData=""
         setChannel(rx,tx)
         bleServiceControl.WriteCmd(a, 0)
     }
 
     fun writeUtf(a: String,rx: String, tx: String) {
+        RxData=""
         setChannel(rx,tx)
         bleServiceControl.WriteCmd(a.toByteArray(Charset.forName("UTF-8")), 0)
     }
 
     fun writeBytes(a: ByteArray,rx: String, tx: String) {
+        RxData=""
         setChannel(rx,tx)
         bleServiceControl.WriteCmd(a, 0)
     }
