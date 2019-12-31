@@ -28,7 +28,7 @@ allprojects {
 在需要用到這個庫的module中的build.gradle中的dependencies中加入
 ```kotlin
 dependencies {
-implementation 'com.github.sam38124:JzBleHelper:3.5'
+implementation 'com.github.sam38124:JzBleHelper:3.6'
 }
 ```
 <a name="Use"></a>
