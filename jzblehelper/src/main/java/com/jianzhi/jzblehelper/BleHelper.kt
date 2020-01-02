@@ -7,19 +7,19 @@ import com.jianzhi.jzblehelper.server.BleServiceControl
 import com.jianzhi.jzblehelper.server.ScanDevice
 import java.nio.charset.Charset
 
-class BleHelper(val context: Context,val callback: BleCallBack) {
+class BleHelper(val context: Context, val callback: BleCallBack) {
     var RXchannel = ""
     var TXchannel = ""
-    var RxData=""
+    var RxData = ""
     var handler = Handler()
     internal var bleServiceControl = BleServiceControl()
-    var scan = ScanDevice( context,this)
+    var scan = ScanDevice(context, this)
     fun setChannel(rx: String, tx: String) {
         RXchannel = rx
         TXchannel = tx
     }
 
-    fun connect(address: String,seconds: Int) {
+    fun connect(address: String, seconds: Int) {
         scan.scanLeDevice(false)
         callback.onConnecting()
         bleServiceControl.bleCallbackC = this
@@ -46,21 +46,21 @@ class BleHelper(val context: Context,val callback: BleCallBack) {
         bleServiceControl.ReadCmd(uuid)
     }
 
-    fun writeHex(a: String,rx: String, tx: String) {
-        RxData=""
-        setChannel(rx,tx)
+    fun writeHex(a: String, rx: String, tx: String) {
+        RxData = ""
+        setChannel(rx, tx)
         bleServiceControl.WriteCmd(a, 0)
     }
 
-    fun writeUtf(a: String,rx: String, tx: String) {
-        RxData=""
-        setChannel(rx,tx)
+    fun writeUtf(a: String, rx: String, tx: String) {
+        RxData = ""
+        setChannel(rx, tx)
         bleServiceControl.WriteCmd(a.toByteArray(Charset.forName("UTF-8")), 0)
     }
 
-    fun writeBytes(a: ByteArray,rx: String, tx: String) {
-        RxData=""
-        setChannel(rx,tx)
+    fun writeBytes(a: ByteArray, rx: String, tx: String) {
+        RxData = ""
+        setChannel(rx, tx)
         bleServiceControl.WriteCmd(a, 0)
     }
 
@@ -76,6 +76,9 @@ class BleHelper(val context: Context,val callback: BleCallBack) {
         bleServiceControl.disconnect()
     }
 
+    fun isConnect(): Boolean {
+        return bleServiceControl.isconnect
+    }
 
 }
 
