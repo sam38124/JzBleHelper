@@ -44,7 +44,6 @@ class BleHelper(val context: Context, val callback: BleCallBack) {
             handler.post {
                 if (!bleServiceControl.isconnect) {
                     callback.onConnectFalse()
-                    closeBle()
                 }
             }
             stopScan()
