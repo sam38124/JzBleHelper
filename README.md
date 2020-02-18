@@ -28,7 +28,7 @@ allprojects {
 在需要用到這個庫的module中的build.gradle中的dependencies中加入
 ```kotlin
 dependencies {
-implementation 'com.github.sam38124:JzBleHelper:3.7'
+implementation 'com.github.sam38124:JzBleHelper:4.0'
 }
 ```
 <a name="Use"></a>
@@ -38,13 +38,18 @@ implementation 'com.github.sam38124:JzBleHelper:3.7'
 #### 1.Activity範例
 ```kotlin
 class MainActivity : AppCompatActivity(), BleCallBack {
-    override fun onConnecting() {
+      override fun onConnecting() {
         //當ble開始連線時觸發
         Log.d("JzBleMessage", "藍牙正在連線中")
     }
 
     override fun onConnectFalse() {
         //當ble連線失敗時觸發
+        Log.d("JzBleMessage", "連線失敗")
+    }
+
+    override fun onDisconnect() {
+        //當藍牙斷線時觸發
         Log.d("JzBleMessage", "藍牙斷線")
     }
 
@@ -63,7 +68,7 @@ class MainActivity : AppCompatActivity(), BleCallBack {
 
     override fun tx(b: BleBinary) {
         //當ble傳送訊息時觸發
-	//1.readUTF()
+        //1.readUTF()
         //2.readHEX()
         //3.readBytes()
         Log.d("JzBleMessage", "傳送藍牙消息${b.readUTF()}")
@@ -86,14 +91,6 @@ class MainActivity : AppCompatActivity(), BleCallBack {
     override fun needGPS() {
         //6.0以上的手機必須打開手機定位才能取得藍牙權限，監聽到此function即可提醒使用者打開定位，或者跳轉至設定頁面提醒打開定位
         Log.d("JzBleMessage", "請打開定位系統")
-    }
-
-    lateinit var BleHelper: BleHelper
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        BleHelper = BleHelper(this, this)
     }
     }
 ```
