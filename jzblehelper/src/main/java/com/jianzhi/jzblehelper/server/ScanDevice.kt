@@ -32,17 +32,17 @@ class ScanDevice( var context: Context,var blehelper: BleHelper) {
         }
     }
 
-    fun setmBluetoothAdapter() {
-        initPermission()
+    fun setmBluetoothAdapter():Boolean {
         val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         mBluetoothAdapter = bluetoothManager.adapter
         if (mBluetoothAdapter == null) {
-            Toast.makeText(context, "notsupport", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "blenotsupport", Toast.LENGTH_SHORT).show()
         }
+       return initPermission()
     }
 
     //-----------------------method1檢查權限------------------------------------------
-    fun initPermission() {
+    fun initPermission():Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val a = ArrayList<String>();
             if (context.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
@@ -53,27 +53,30 @@ class ScanDevice( var context: Context,var blehelper: BleHelper) {
             }
             if (a.size > 0) {
                 blehelper.callback.requestPermission(a)
+                return false
             } else {
                 if (!isLocServiceEnable(context)) {
                     blehelper.callback.needGPS()
+                    return false
                 }else{
-                    RequestPermission()
+                    return RequestPermission()
                 }
             }
         } else {
-            RequestPermission()
+          return  RequestPermission()
         }
     }
 
-    fun RequestPermission() {
+    fun RequestPermission():Boolean {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         val originalBluetooth = mBluetoothAdapter != null && mBluetoothAdapter!!.isEnabled
         if (originalBluetooth) {
             scanLeDevice(true)
-            mBluetoothAdapter!!.startDiscovery()
-        } else if (originalBluetooth == false) {
+            return mBluetoothAdapter!!.startDiscovery()
+        } else {
             scanLeDevice(true)
             mBluetoothAdapter!!.enable()
+          return  mBluetoothAdapter!!.startDiscovery()
         }
     }
 

@@ -72,8 +72,8 @@ class BleHelper(val context: Context, val callback: BleCallBack) {
         bleServiceControl.WriteCmd(a, 0)
     }
 
-    fun startScan() {
-        scan.setmBluetoothAdapter()
+    fun startScan():Boolean {
+       return scan.setmBluetoothAdapter()
     }
 
     fun stopScan() {
