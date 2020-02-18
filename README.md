@@ -37,8 +37,8 @@ implementation 'com.github.sam38124:JzBleHelper:4.0'
 ### 在要監聽藍牙的地方繼承Ble_CallBack
 #### 1.Activity範例
 ```kotlin
-class MainActivity : AppCompatActivity(), BleCallBack {
-      override fun onConnecting() {
+cclass MainActivity : AppCompatActivity(), BleCallBack {
+     override fun onConnecting() {
         //當ble開始連線時觸發
         Log.d("JzBleMessage", "藍牙正在連線中")
     }
@@ -91,6 +91,14 @@ class MainActivity : AppCompatActivity(), BleCallBack {
     override fun needGPS() {
         //6.0以上的手機必須打開手機定位才能取得藍牙權限，監聽到此function即可提醒使用者打開定位，或者跳轉至設定頁面提醒打開定位
         Log.d("JzBleMessage", "請打開定位系統")
+    }
+
+    lateinit var BleHelper: BleHelper
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        BleHelper = BleHelper(this, this)
     }
     }
 ```
