@@ -61,7 +61,7 @@ class BluetoothLeService : Service() {
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 mConnectionState = STATE_DISCONNECTED
                 Log.i(TAG, "Disconnected from GATT server.")
-                bleCallbackC!!.callback.onConnectFalse()
+                bleCallbackC!!.callback.onDisconnect()
                 bleCallbackC!!.bleServiceControl.isconnect = false
                 Log.w("s", "斷線")
             }

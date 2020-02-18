@@ -6,6 +6,7 @@ import com.jianzhi.jzblehelper.models.BleBinary
 interface BleCallBack{
     fun onConnecting()
     fun onConnectFalse()
+    fun onDisconnect()
     fun onConnectSuccess()
     fun rx(a: BleBinary)
     fun tx(b: BleBinary)

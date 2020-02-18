@@ -1,5 +1,6 @@
 package com.jianzhi.jzblehelper
 
+import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.os.Handler
 import com.jianzhi.jzblehelper.callback.BleCallBack
@@ -12,6 +13,7 @@ class BleHelper(val context: Context, val callback: BleCallBack) {
     var TXchannel = ""
     var RxData = ""
     var handler = Handler()
+    var bleadapter=BluetoothAdapter.getDefaultAdapter()
     internal var bleServiceControl = BleServiceControl()
     var scan = ScanDevice(context, this)
     fun setChannel(rx: String, tx: String) {
@@ -19,6 +21,12 @@ class BleHelper(val context: Context, val callback: BleCallBack) {
         TXchannel = tx
     }
 
+    fun openBle():Boolean{
+        return bleadapter.enable()
+    }
+    fun closeBle():Boolean{
+        return bleadapter.disable()
+    }
     fun connect(address: String, seconds: Int) {
         scan.scanLeDevice(false)
         callback.onConnecting()
@@ -39,6 +47,7 @@ class BleHelper(val context: Context, val callback: BleCallBack) {
                 }
             }
             stopScan()
+            closeBle()
         }.start()
     }
 

@@ -20,6 +20,11 @@ class MainActivity : AppCompatActivity(), BleCallBack {
 
     override fun onConnectFalse() {
         //當ble連線失敗時觸發
+        Log.d("JzBleMessage", "連線失敗")
+    }
+
+    override fun onDisconnect() {
+        //當藍牙斷線時觸發
         Log.d("JzBleMessage", "藍牙斷線")
     }
 
