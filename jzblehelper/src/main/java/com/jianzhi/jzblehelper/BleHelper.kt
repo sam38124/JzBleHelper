@@ -3,7 +3,9 @@ package com.jianzhi.jzblehelper
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.os.Handler
+import android.provider.CallLog
 import com.jianzhi.jzblehelper.callback.BleCallBack
+import com.jianzhi.jzblehelper.callback.ConnectResult
 import com.jianzhi.jzblehelper.server.BleServiceControl
 import com.jianzhi.jzblehelper.server.ScanDevice
 import java.nio.charset.Charset
@@ -27,9 +29,8 @@ class BleHelper(val context: Context, val callback: BleCallBack) {
     fun closeBle():Boolean{
         return bleadapter.disable()
     }
-    fun connect(address: String, seconds: Int) {
+    fun connect(address: String, seconds: Int,back: ConnectResult) {
         scan.scanLeDevice(false)
-        callback.onConnecting()
         bleServiceControl.bleCallbackC = this
         bleServiceControl.connect(address)
         Thread {
@@ -42,9 +43,7 @@ class BleHelper(val context: Context, val callback: BleCallBack) {
                 nowtime++
             }
             handler.post {
-                if (!bleServiceControl.isconnect) {
-                    callback.onConnectFalse()
-                }
+                back.result(bleServiceControl.isconnect)
             }
             stopScan()
         }.start()

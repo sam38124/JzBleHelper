@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat
 import com.jianzhi.jzblehelper.models.BleBinary
 import com.jianzhi.jzblehelper.BleHelper
 import com.jianzhi.jzblehelper.callback.BleCallBack
+import com.jianzhi.jzblehelper.callback.ConnectResult
 
 class MainActivity : AppCompatActivity(), BleCallBack {
     var RxChannel = "00008D81-0000-1000-8000-00805F9B34FB"
@@ -85,7 +86,7 @@ class MainActivity : AppCompatActivity(), BleCallBack {
                 BleHelper.stopScan()
             }
             R.id.connect -> {
-                BleHelper.connect("00:C0:BF:13:05:C7",10)
+                BleHelper.connect("00:C0:BF:13:05:C7",10,ConnectResult{})
             }
             R.id.disconnect->{
                 BleHelper.disconnect()
