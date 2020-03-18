@@ -196,6 +196,8 @@ class BluetoothLeService : Service() {
         if (mBluetoothGatt != null) {
             disconnect()
         }
+        // Previously connected device.  Try to reconnect.
+
 
         val device = mBluetoothAdapter!!.getRemoteDevice(address)
         if (device == null) {
