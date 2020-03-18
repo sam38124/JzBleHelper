@@ -28,7 +28,7 @@ allprojects {
 在需要用到這個庫的module中的build.gradle中的dependencies中加入
 ```kotlin
 dependencies {
-implementation 'com.github.sam38124:JzBleHelper:4.3'
+implementation 'com.github.sam38124:JzBleHelper:4.6'
 }
 ```
 <a name="Use"></a>
@@ -118,7 +118,7 @@ Ble_Helper.stopScan()
 
 ```kotlin
 //嘗試連線10秒，Address替換為搜尋到的藍牙地址，例如：00:C0:BF:13:05:C7
-Ble_Helper.connect("Address",10)
+  BleHelper.connect("00:C0:BF:13:05:C7",10,ConnectResult{})
 ```
 #### 藍牙斷線
 ```kotlin
