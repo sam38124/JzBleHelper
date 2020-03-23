@@ -112,6 +112,7 @@ class BleServiceControl {
 
     fun WriteCmd(write: ByteArray, check: Int): Boolean {
         SubscribeRxChannel()
+        Thread.sleep(100)
         for (a in mGattCharacteristics) {
             if (UUID.fromString(bleCallbackC!!.TXchannel) == a.uuid) {
                 mBluetoothLeService!!.check = check
@@ -127,6 +128,7 @@ class BleServiceControl {
 
     fun WriteCmd(write: String, check: Int): Boolean {
         SubscribeRxChannel()
+        Thread.sleep(100)
         for (a in mGattCharacteristics) {
             if (UUID.fromString(bleCallbackC!!.TXchannel) == a.uuid) {
                 mBluetoothLeService!!.check = check
