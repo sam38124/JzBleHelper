@@ -278,7 +278,7 @@ class BluetoothLeService : Service() {
             mBluetoothGatt!!.writeDescriptor(descriptor)
         }
         try {
-            sleep(100)
+            sleep(500)
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
