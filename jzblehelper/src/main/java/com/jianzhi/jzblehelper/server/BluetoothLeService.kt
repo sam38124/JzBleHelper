@@ -48,12 +48,7 @@ class BluetoothLeService : Service() {
 var nowtag=0
     // Implements callback methods for GATT events that the app cares about.  For example,
     // connection change and services discovered.
-    inner class callback:BluetoothGattCallback(){
-        var tag=0
-        init {
-            nowtag += 1
-            tag=nowtag
-        }
+    inner class callback(val tag:Int):BluetoothGattCallback(){
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
             if(nowtag!=tag){return}
             val intentAction: String
@@ -224,7 +219,8 @@ if(mBluetoothDeviceAddress!=null && address==mBluetoothDeviceAddress && mBluetoo
             return false
         }
         // We want to directly connect to the device, so we are setting the autoConnect
-        mBluetoothGatt = device.connectGatt(this, false, callback())
+        nowtag+=1
+        mBluetoothGatt = device.connectGatt(this, false, callback(nowtag))
         Log.d(TAG, "Trying to create a new connection.")
         mBluetoothDeviceAddress = address
         mConnectionState = STATE_CONNECTING
