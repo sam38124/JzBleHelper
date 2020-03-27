@@ -197,7 +197,16 @@ class BluetoothLeService : Service() {
             disconnect()
         }
         // Previously connected device.  Try to reconnect.
-
+if(mBluetoothDeviceAddress!=null && address==mBluetoothDeviceAddress && mBluetoothGatt != null){
+    Log.e("JzBleMessage","reconnect")
+    if(mBluetoothGatt!!.connect()){
+        mConnectionState= STATE_CONNECTING
+        return true
+    }else{
+        mBluetoothDeviceAddress=null
+        return false
+    }
+}
 
         val device = mBluetoothAdapter!!.getRemoteDevice(address)
         if (device == null) {
@@ -205,7 +214,6 @@ class BluetoothLeService : Service() {
             return false
         }
         // We want to directly connect to the device, so we are setting the autoConnect
-        // parameter to false.
         mBluetoothGatt = device.connectGatt(this, false, mGattCallback)
         Log.d(TAG, "Trying to create a new connection.")
         mBluetoothDeviceAddress = address
