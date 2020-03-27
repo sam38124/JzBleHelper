@@ -63,6 +63,7 @@ class BluetoothLeService : Service() {
                 Log.i(TAG, "Disconnected from GATT server.")
                 bleCallbackC!!.callback.onDisconnect()
                 bleCallbackC!!.bleServiceControl.isconnect = false
+                gatt.close()
                 Log.w("s", "斷線")
             }
         }
