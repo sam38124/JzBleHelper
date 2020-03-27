@@ -194,6 +194,9 @@ class BluetoothLeService : Service() {
             Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.")
             return false
         }
+        if (mBluetoothGatt != null) {
+            disconnect()
+        }
         // Previously connected device.  Try to reconnect.
 if(mBluetoothDeviceAddress!=null && address==mBluetoothDeviceAddress && mBluetoothGatt != null){
     Log.e("JzBleMessage","reconnect")
@@ -205,7 +208,6 @@ if(mBluetoothDeviceAddress!=null && address==mBluetoothDeviceAddress && mBluetoo
         return false
     }
 }
-
         val device = mBluetoothAdapter!!.getRemoteDevice(address)
         if (device == null) {
             Log.w(TAG, "Device not found.  Unable to connect.")
