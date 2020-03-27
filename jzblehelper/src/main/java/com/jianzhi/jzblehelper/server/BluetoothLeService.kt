@@ -45,11 +45,17 @@ class BluetoothLeService : Service() {
     private var mConnectionState = STATE_DISCONNECTED
     internal var check = 0
     internal var tmp = ""
-
+var nowtag=0
     // Implements callback methods for GATT events that the app cares about.  For example,
     // connection change and services discovered.
-    private val mGattCallback = object : BluetoothGattCallback() {
+    inner class callback:BluetoothGattCallback(){
+        var tag=0
+        init {
+            nowtag+=1
+            tag=nowtag
+        }
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
+            if(nowtag!=tag){return}
             val intentAction: String
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 bleCallbackC!!.callback.onConnectSuccess()
@@ -63,12 +69,12 @@ class BluetoothLeService : Service() {
                 Log.i(TAG, "Disconnected from GATT server.")
                 bleCallbackC!!.callback.onDisconnect()
                 bleCallbackC!!.bleServiceControl.isconnect = false
-                gatt.close()
                 Log.w("s", "斷線")
             }
         }
 
         override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
+            if(nowtag!=tag){return}
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 bleCallbackC!!.bleServiceControl.displayGattServices(supportedGattServices)
             } else {
@@ -81,6 +87,7 @@ class BluetoothLeService : Service() {
             characteristic: BluetoothGattCharacteristic,
             status: Int
         ) {
+            if(nowtag!=tag){return}
             tmp = tmp + bytesToHex(characteristic.value)
             if (tmp.length == check || check == 0) {
                 bleCallbackC!!.callback.rx(BleBinary(characteristic.value))
@@ -92,6 +99,7 @@ class BluetoothLeService : Service() {
             characteristic: BluetoothGattCharacteristic,
             status: Int
         ) {
+            if(nowtag!=tag){return}
             bleCallbackC!!.callback.tx(BleBinary(characteristic.value))
         }
 
@@ -99,6 +107,7 @@ class BluetoothLeService : Service() {
             gatt: BluetoothGatt,
             characteristic: BluetoothGattCharacteristic
         ) {
+            if(nowtag!=tag){return}
             tmp = tmp + bytesToHex(characteristic.value)
             if (tmp.length == check || check == 0) {
                 bleCallbackC!!.callback.rx(BleBinary(characteristic.value))
@@ -214,7 +223,7 @@ if(mBluetoothDeviceAddress!=null && address==mBluetoothDeviceAddress && mBluetoo
             return false
         }
         // We want to directly connect to the device, so we are setting the autoConnect
-        mBluetoothGatt = device.connectGatt(this, false, mGattCallback)
+        mBluetoothGatt = device.connectGatt(this, false, callback())
         Log.d(TAG, "Trying to create a new connection.")
         mBluetoothDeviceAddress = address
         mConnectionState = STATE_CONNECTING
