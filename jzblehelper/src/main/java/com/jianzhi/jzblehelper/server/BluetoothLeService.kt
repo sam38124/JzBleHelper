@@ -194,9 +194,6 @@ class BluetoothLeService : Service() {
             Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.")
             return false
         }
-        if (mBluetoothGatt != null) {
-            disconnect()
-        }
         // Previously connected device.  Try to reconnect.
 if(mBluetoothDeviceAddress!=null && address==mBluetoothDeviceAddress && mBluetoothGatt != null){
     Log.e("JzBleMessage","reconnect")
