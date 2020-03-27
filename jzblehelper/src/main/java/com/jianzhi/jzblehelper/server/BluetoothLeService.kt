@@ -70,6 +70,7 @@ var nowtag=0
                 bleCallbackC!!.callback.onDisconnect()
                 bleCallbackC!!.bleServiceControl.isconnect = false
                 Log.w("s", "斷線")
+                close()
             }
         }
 

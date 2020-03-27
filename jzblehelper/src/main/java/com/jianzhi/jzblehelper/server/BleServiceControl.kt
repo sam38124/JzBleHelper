@@ -50,7 +50,7 @@ class BleServiceControl {
             this.mDeviceAddress = mDeviceAddress
             if (mBluetoothLeService != null) {
                 mBluetoothLeService!!.connect(mDeviceAddress)
-                return
+                bleCallbackC!!.context.unbindService(mServiceConnection)
             }
             val gattServiceIntent = Intent(bleCallbackC!!.context, BluetoothLeService::class.java)
             bleCallbackC!!.context.bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE)
