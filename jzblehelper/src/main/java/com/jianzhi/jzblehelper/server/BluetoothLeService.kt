@@ -51,7 +51,7 @@ var nowtag=0
     inner class callback:BluetoothGattCallback(){
         var tag=0
         init {
-            nowtag+=1
+            nowtag += 1
             tag=nowtag
         }
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
@@ -115,7 +115,6 @@ var nowtag=0
 
         }
     }
-
     private val mBinder = LocalBinder()
 
     /**
@@ -199,6 +198,7 @@ var nowtag=0
      * callback.
      */
     fun connect(address: String?): Boolean {
+        close()
         if (mBluetoothAdapter == null || address == null) {
             Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.")
             return false
