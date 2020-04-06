@@ -41,9 +41,6 @@ class BleHelper(val context: Context, val callback: BleCallBack) {
                 }
                 Thread.sleep(1000)
                 nowtime++
-                handler.post {
-                    bleServiceControl.connect(address)
-                }
             }
             handler.post {
                 back.result(bleServiceControl.isconnect)
