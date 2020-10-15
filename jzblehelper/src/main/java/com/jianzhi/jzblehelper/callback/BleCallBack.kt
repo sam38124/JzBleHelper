@@ -10,7 +10,7 @@ interface BleCallBack{
     fun onConnectSuccess()
     fun rx(a: BleBinary)
     fun tx(b: BleBinary)
-    fun scanBack(device: BluetoothDevice)
+    fun scanBack(device: BluetoothDevice,scanRecord: BleBinary)
     fun requestPermission(permission: ArrayList<String>)
     fun needGPS()
 }

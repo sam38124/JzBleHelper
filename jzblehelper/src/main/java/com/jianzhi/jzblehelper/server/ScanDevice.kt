@@ -11,6 +11,7 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import com.jianzhi.jzblehelper.BleHelper
+import com.jianzhi.jzblehelper.models.BleBinary
 
 import java.util.ArrayList
 
@@ -18,7 +19,7 @@ class ScanDevice( var context: Context,var blehelper: BleHelper) {
     private var mBluetoothAdapter: BluetoothAdapter? = null
     private val mLeDevices = ArrayList<BluetoothDevice>()
     private val mLeScanCallback = BluetoothAdapter.LeScanCallback { device, rssi, scanRecord ->
-            blehelper.callback.scanBack(device)
+            blehelper.callback.scanBack(device, BleBinary(scanRecord))
         val stringBuilder = StringBuilder()
         for (a in scanRecord) {
             stringBuilder.append(String.format("%02X", a))
