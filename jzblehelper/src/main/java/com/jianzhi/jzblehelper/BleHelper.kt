@@ -45,7 +45,6 @@ class BleHelper(val context: Context, val callback: BleCallBack) {
             handler.post {
                 back.result(bleServiceControl.isconnect)
             }
-            stopScan()
         }.start()
     }
 
