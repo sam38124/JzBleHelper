@@ -30,7 +30,6 @@ class BleHelper(val context: Context, val callback: BleCallBack) {
         return bleadapter.disable()
     }
     fun connect(address: String, seconds: Int,back: ConnectResult) {
-        scan.scanLeDevice(false)
         bleServiceControl.bleCallbackC = this
         bleServiceControl.connect(address)
         Thread {
