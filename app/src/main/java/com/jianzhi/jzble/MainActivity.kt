@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity(), BleCallBack {
     }
 
     fun onclick(view: View) {
+
         when (view.id) {
             R.id.start -> {
                 BleHelper.startScan()

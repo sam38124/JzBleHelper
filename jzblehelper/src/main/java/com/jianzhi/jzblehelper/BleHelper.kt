@@ -16,7 +16,7 @@ class BleHelper(val context: Context, val callback: BleCallBack) {
     var RxData = ""
     var handler = Handler()
     var bleadapter=BluetoothAdapter.getDefaultAdapter()
-    internal var bleServiceControl = BleServiceControl()
+    var bleServiceControl = BleServiceControl()
     var scan = ScanDevice(context, this)
     fun setChannel(rx: String, tx: String) {
         RXchannel = rx

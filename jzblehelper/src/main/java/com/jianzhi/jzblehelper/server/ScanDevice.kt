@@ -72,6 +72,7 @@ class ScanDevice( var context: Context,var blehelper: BleHelper) {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         val originalBluetooth = mBluetoothAdapter != null && mBluetoothAdapter!!.isEnabled
         if (originalBluetooth) {
+
             scanLeDevice(true)
             return mBluetoothAdapter!!.startDiscovery()
         } else {
