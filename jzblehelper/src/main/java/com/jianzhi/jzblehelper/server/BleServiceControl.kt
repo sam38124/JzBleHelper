@@ -132,8 +132,7 @@ class BleServiceControl {
                 mBluetoothLeService!!.tmp = ""
                 mNotifyCharacteristic = a
                 mNotifyCharacteristic!!.value = StringHexToByte(write)
-                mBluetoothLeService!!.writeCharacteristic(mNotifyCharacteristic!!)
-                return true
+                return mBluetoothLeService!!.writeCharacteristic(mNotifyCharacteristic!!)
             }
         }
         return false

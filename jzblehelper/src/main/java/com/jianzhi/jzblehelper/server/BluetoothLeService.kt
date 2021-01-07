@@ -299,8 +299,8 @@ if(mBluetoothDeviceAddress!=null && address==mBluetoothDeviceAddress && mBluetoo
 
     }
 
-    fun writeCharacteristic(mNotifyCharacteristic: BluetoothGattCharacteristic) {
-        mBluetoothGatt!!.writeCharacteristic(mNotifyCharacteristic)
+    fun writeCharacteristic(mNotifyCharacteristic: BluetoothGattCharacteristic):Boolean {
+       return mBluetoothGatt!!.writeCharacteristic(mNotifyCharacteristic)
     }
 
     companion object {

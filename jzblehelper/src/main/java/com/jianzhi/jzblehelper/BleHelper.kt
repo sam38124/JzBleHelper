@@ -15,7 +15,7 @@ class BleHelper(val context: Context, val callback: BleCallBack) {
     var TXchannel = ""
     var RxData = ""
     var handler = Handler()
-    var bleadapter=BluetoothAdapter.getDefaultAdapter()
+    var bleadapter = BluetoothAdapter.getDefaultAdapter()
     var bleServiceControl = BleServiceControl()
     var scan = ScanDevice(context, this)
     fun setChannel(rx: String, tx: String) {
@@ -23,13 +23,15 @@ class BleHelper(val context: Context, val callback: BleCallBack) {
         TXchannel = tx
     }
 
-    fun openBle():Boolean{
+    fun openBle(): Boolean {
         return bleadapter.enable()
     }
-    fun closeBle():Boolean{
+
+    fun closeBle(): Boolean {
         return bleadapter.disable()
     }
-    fun connect(address: String, seconds: Int,back: ConnectResult) {
+
+    fun connect(address: String, seconds: Int, back: ConnectResult) {
         bleServiceControl.bleCallbackC = this
         bleServiceControl.connect(address)
         Thread {
@@ -51,26 +53,26 @@ class BleHelper(val context: Context, val callback: BleCallBack) {
         bleServiceControl.ReadCmd(uuid)
     }
 
-    fun writeHex(a: String, rx: String, tx: String) {
+    fun writeHex(a: String, rx: String, tx: String): Boolean {
         RxData = ""
         setChannel(rx, tx)
-        bleServiceControl.WriteCmd(a, 0)
+        return bleServiceControl.WriteCmd(a, 0)
     }
 
-    fun writeUtf(a: String, rx: String, tx: String) {
+    fun writeUtf(a: String, rx: String, tx: String): Boolean {
         RxData = ""
         setChannel(rx, tx)
-        bleServiceControl.WriteCmd(a.toByteArray(Charset.forName("UTF-8")), 0)
+        return bleServiceControl.WriteCmd(a.toByteArray(Charset.forName("UTF-8")), 0)
     }
 
-    fun writeBytes(a: ByteArray, rx: String, tx: String) {
+    fun writeBytes(a: ByteArray, rx: String, tx: String): Boolean {
         RxData = ""
         setChannel(rx, tx)
-        bleServiceControl.WriteCmd(a, 0)
+        return bleServiceControl.WriteCmd(a, 0)
     }
 
-    fun startScan():Boolean {
-       return scan.setmBluetoothAdapter()
+    fun startScan(): Boolean {
+        return scan.setmBluetoothAdapter()
     }
 
     fun stopScan() {
