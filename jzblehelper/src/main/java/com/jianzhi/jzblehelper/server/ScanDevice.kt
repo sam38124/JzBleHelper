@@ -24,13 +24,6 @@ class ScanDevice( var context: Context,var blehelper: BleHelper) {
         for (a in scanRecord) {
             stringBuilder.append(String.format("%02X", a))
         }
-        Log.d("scanrecord", stringBuilder.toString())
-        try {
-            Log.d("name", device.name)
-        } catch (e: Exception) {
-            mLeDevices.add(device)
-            Log.d("name", "UNROWN")
-        }
     }
 
     fun setmBluetoothAdapter():Boolean {
