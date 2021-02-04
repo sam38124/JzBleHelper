@@ -19,7 +19,7 @@ class ScanDevice( var context: Context,var blehelper: BleHelper) {
     private var mBluetoothAdapter: BluetoothAdapter? = null
     private val mLeDevices = ArrayList<BluetoothDevice>()
     private val mLeScanCallback = BluetoothAdapter.LeScanCallback { device, rssi, scanRecord ->
-            blehelper.callback.scanBack(device, BleBinary(scanRecord))
+            blehelper.callback.scanBack(device, BleBinary(scanRecord),rssi)
         val stringBuilder = StringBuilder()
         for (a in scanRecord) {
             stringBuilder.append(String.format("%02X", a))

@@ -52,7 +52,6 @@ class MainActivity : AppCompatActivity(), BleCallBack {
 
     override fun scanBack(device: BluetoothDevice,bleBinary: BleBinary) {
         //當掃描到新裝置時觸發
-
         Log.d("JzBleMessage", "掃描到裝置:名稱${device.name}/地址:${device.address}")
         //當獲取到device.address即可儲存下來，藍牙連線時會使用到
     }
@@ -79,7 +78,6 @@ class MainActivity : AppCompatActivity(), BleCallBack {
     }
 
     fun onclick(view: View) {
-
         when (view.id) {
             R.id.start -> {
                 BleHelper.startScan()
