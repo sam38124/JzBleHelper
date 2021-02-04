@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(), BleCallBack {
         Log.d("JzBleMessage", "傳送藍牙消息${b.readUTF()}")
     }
 
-    override fun scanBack(device: BluetoothDevice,bleBinary: BleBinary) {
+    override fun scanBack(device: BluetoothDevice,bleBinary: BleBinary,rssi:Int) {
         //當掃描到新裝置時觸發
         Log.d("JzBleMessage", "掃描到裝置:名稱${device.name}/地址:${device.address}")
         //當獲取到device.address即可儲存下來，藍牙連線時會使用到
