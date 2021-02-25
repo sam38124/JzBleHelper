@@ -70,7 +70,7 @@ class BleServiceControl {
         for (gattService in gattServices) {
             val currentServiceData = HashMap<String, String>()
             uuid = gattService.uuid.toString()
-            Log.d("uuid", uuid)
+            Log.d("uuid-Server", uuid)
             currentServiceData[LIST_NAME] = SampleGattAttributes.lookup(uuid, unknownServiceString)
             currentServiceData[LIST_UUID] = uuid
             gattServiceData.add(currentServiceData)
@@ -83,6 +83,7 @@ class BleServiceControl {
                 mGattCharacteristics.add(gattCharacteristic)
                 val currentCharaData = HashMap<String, String>()
                 uuid = gattCharacteristic.uuid.toString()
+                Log.d("uuid-Channel", uuid)
                 currentCharaData[LIST_NAME] = SampleGattAttributes.lookup(uuid, unknownCharaString)
                 currentCharaData[LIST_UUID] = uuid
                 gattCharacteristicGroupData.add(currentCharaData)
