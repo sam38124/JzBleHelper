@@ -6,16 +6,14 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
+import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Build
-import android.util.Log
-import android.widget.Toast
 import com.jianzhi.jzblehelper.BleHelper
+import com.jianzhi.jzblehelper.BleHelper.Companion.isScanning
 import com.jianzhi.jzblehelper.models.BleBinary
-
-import java.util.ArrayList
 
 class ScanDevice( var context: Context,var blehelper: BleHelper) {
     private var mBluetoothAdapter: BluetoothAdapter? = null
@@ -67,8 +65,11 @@ class ScanDevice( var context: Context,var blehelper: BleHelper) {
     fun RequestPermission():Boolean {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         val originalBluetooth = mBluetoothAdapter != null && mBluetoothAdapter!!.isEnabled
+        scanLeDevice(true)
+        return true
+//        mBluetoothAdapter!!.enable()
+//        return  true
         return if (originalBluetooth) {
-
             scanLeDevice(true)
             mBluetoothAdapter!!.startDiscovery()
         } else {
@@ -77,15 +78,24 @@ class ScanDevice( var context: Context,var blehelper: BleHelper) {
             mBluetoothAdapter!!.startDiscovery()
         }
     }
-
+    fun createScanSetting(): ScanSettings? {
+        val builder = ScanSettings.Builder()
+        builder.setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+        //builder.setReportDelay(100);//設定延遲返回時間
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            builder.setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
+        }
+        return builder.build()
+    }
     //----------method2開始掃描
     fun scanLeDevice(enable: Boolean) {
         try{
             if (enable) {
+                isScanning=true
                 mLeDevices.clear()
-
-                mBluetoothAdapter!!.bluetoothLeScanner.startScan(mLeScanCallback)
+                mBluetoothAdapter!!.bluetoothLeScanner.startScan(null,createScanSetting(),mLeScanCallback)
             } else {
+                isScanning=false
                 mBluetoothAdapter!!.bluetoothLeScanner.stopScan(mLeScanCallback)
             }
         }catch (e:Exception){}

@@ -11,6 +11,10 @@ import com.jianzhi.jzblehelper.server.ScanDevice
 import java.nio.charset.Charset
 
 class BleHelper(val context: Context, val callback: BleCallBack) {
+    companion object{
+        //判斷是否正在掃描
+        var isScanning=false
+    }
     var RXchannel = ""
     var TXchannel = ""
     var RxData = ""
