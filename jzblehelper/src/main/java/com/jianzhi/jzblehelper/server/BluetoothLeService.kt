@@ -45,7 +45,7 @@ class BluetoothLeService : Service() {
     private var mConnectionState = STATE_DISCONNECTED
     internal var check = 0
     internal var tmp = ""
-var nowtag=0
+    var nowtag=0
     // Implements callback methods for GATT events that the app cares about.  For example,
     // connection change and services discovered.
     inner class callback(val tag:Int):BluetoothGattCallback(){

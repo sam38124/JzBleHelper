@@ -70,11 +70,12 @@ class MainActivity : AppCompatActivity(), BleCallBack {
     }
 
     lateinit var BleHelper: BleHelper
-
+    lateinit var BleHelper2: BleHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         BleHelper = BleHelper(this, this)
+        BleHelper2=BleHelper(this, this)
     }
 
     fun onclick(view: View) {
@@ -86,7 +87,10 @@ class MainActivity : AppCompatActivity(), BleCallBack {
                 BleHelper.stopScan()
             }
             R.id.connect -> {
-                BleHelper.connect("00:C0:BF:13:05:C7",10,ConnectResult{})
+                BleHelper.connect("00:C0:BF:29:00:8B",10) {}
+            }
+            R.id.connect2 -> {
+                BleHelper2.connect("2C:42:8F:39:60:2E",10) {}
             }
             R.id.disconnect->{
                 BleHelper.disconnect()

@@ -7,26 +7,58 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity" android:orientation="vertical">
 
-    <Button
-            android:text="掃描藍牙"
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/start"
-            android:onClick="onclick" android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
-    <Button
-            android:text="停止掃描"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+        <Button
+                android:id="@+id/connect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_weight="1" android:onClick="onclick"
+                android:text="連線1"/>
+        <Button
+                android:id="@+id/connect2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_weight="1" android:onClick="onclick"
+                android:text="連線2"/>
+        <Button
+                android:id="@+id/disconnect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_weight="1" android:onClick="onclick"
+                android:text="停止連線"/>
+    </LinearLayout>
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/stop" android:onClick="onclick"/>
-    <Button
-            android:text="連線"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <Button
+                android:id="@+id/start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true" android:layout_weight="1" android:onClick="onclick"
+                android:text="掃描藍牙"/>
+        <Button
+                android:id="@+id/stop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_weight="1" android:onClick="onclick"
+                android:text="停止掃描"/>
+    </LinearLayout>
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/connect" android:onClick="onclick"/>
-    <Button
-            android:text="停止連線"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/disconnect" android:onClick="onclick"/>
-    <Button
-            android:text="傳送訊息"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/send" android:onClick="onclick"/>
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+        <EditText
+                android:id="@+id/editTextTextPersonName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"/>
+        <Button
+                android:id="@+id/send"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_weight="2" android:onClick="onclick"
+                android:text="傳送訊息"/>
+    </LinearLayout>
 
 </LinearLayout>

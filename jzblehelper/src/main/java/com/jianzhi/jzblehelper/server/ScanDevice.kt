@@ -4,6 +4,8 @@ import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
+import android.bluetooth.le.ScanCallback
+import android.bluetooth.le.ScanResult
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
@@ -18,9 +20,14 @@ import java.util.ArrayList
 class ScanDevice( var context: Context,var blehelper: BleHelper) {
     private var mBluetoothAdapter: BluetoothAdapter? = null
     private val mLeDevices = ArrayList<BluetoothDevice>()
-    private val mLeScanCallback = BluetoothAdapter.LeScanCallback { device, rssi, scanRecord ->
-            blehelper.callback.scanBack(device, BleBinary(scanRecord),rssi)
-    }
+    private val mLeScanCallback =   object :ScanCallback(){
+        override fun onScanResult(callbackType: Int, result: ScanResult?) {
+            super.onScanResult(callbackType, result)
+            try {
+                blehelper.callback.scanBack(result!!.device, BleBinary(result.scanRecord!!.bytes), result.rssi)
+            }catch (e:Exception){}}
+        }
+
 
     fun setmBluetoothAdapter():Boolean {
         val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -41,15 +48,15 @@ class ScanDevice( var context: Context,var blehelper: BleHelper) {
             if (context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
                 a.add(Manifest.permission.ACCESS_FINE_LOCATION)
             }
-            if (a.size > 0) {
+            return if (a.size > 0) {
                 blehelper.callback.requestPermission(a)
-                return false
+                false
             } else {
                 if (!isLocServiceEnable(context)) {
                     blehelper.callback.needGPS()
-                    return false
+                    false
                 }else{
-                    return RequestPermission()
+                    RequestPermission()
                 }
             }
         } else {
@@ -60,14 +67,14 @@ class ScanDevice( var context: Context,var blehelper: BleHelper) {
     fun RequestPermission():Boolean {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         val originalBluetooth = mBluetoothAdapter != null && mBluetoothAdapter!!.isEnabled
-        if (originalBluetooth) {
+        return if (originalBluetooth) {
 
             scanLeDevice(true)
-            return mBluetoothAdapter!!.startDiscovery()
+            mBluetoothAdapter!!.startDiscovery()
         } else {
             scanLeDevice(true)
             mBluetoothAdapter!!.enable()
-          return  mBluetoothAdapter!!.startDiscovery()
+            mBluetoothAdapter!!.startDiscovery()
         }
     }
 
@@ -76,9 +83,10 @@ class ScanDevice( var context: Context,var blehelper: BleHelper) {
         try{
             if (enable) {
                 mLeDevices.clear()
-                mBluetoothAdapter!!.startLeScan(mLeScanCallback)
+
+                mBluetoothAdapter!!.bluetoothLeScanner.startScan(mLeScanCallback)
             } else {
-                mBluetoothAdapter!!.stopLeScan(mLeScanCallback)
+                mBluetoothAdapter!!.bluetoothLeScanner.stopScan(mLeScanCallback)
             }
         }catch (e:Exception){}
 
